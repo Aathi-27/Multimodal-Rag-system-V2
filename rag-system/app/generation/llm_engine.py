@@ -14,6 +14,7 @@ Handles:
 from __future__ import annotations
 
 import logging
+import threading
 from pathlib import Path
 from typing import Generator, Optional
 
@@ -30,7 +31,7 @@ class LLMEngine:
     def __init__(self) -> None:
         self._model: Optional[Llama] = None
         self._settings = get_settings()
-        self._last_finish_reason: Optional[str] = None
+        self._thread_local = threading.local()
 
     @property
     def is_loaded(self) -> bool:
@@ -140,7 +141,7 @@ class LLMEngine:
         )
         t0 = _time.perf_counter()
 
-        self._last_finish_reason = None
+        self._thread_local.last_finish_reason = None
 
         stream = self._model.create_completion(
             prompt=prompt,
@@ -158,7 +159,7 @@ class LLMEngine:
             token = chunk["choices"][0]["text"]
             finish_reason = chunk["choices"][0].get("finish_reason")
             if finish_reason:
-                self._last_finish_reason = finish_reason
+                self._thread_local.last_finish_reason = finish_reason
             if token:
                 if first:
                     ttft = _time.perf_counter() - t0
@@ -169,7 +170,7 @@ class LLMEngine:
 
         elapsed = _time.perf_counter() - t0
         tps = count / elapsed if elapsed > 0 else 0
-        truncated = self._last_finish_reason == "length"
+        truncated = getattr(self._thread_local, 'last_finish_reason', None) == "length"
         logger.info(
             "Generation done: %d tokens in %.1fs (%.1f tok/s)%s",
             count, elapsed, tps,

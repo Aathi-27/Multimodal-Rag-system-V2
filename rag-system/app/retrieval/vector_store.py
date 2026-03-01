@@ -20,6 +20,7 @@ from qdrant_client.models import (
     FieldCondition,
     Filter,
     HnswConfigDiff,
+    MatchAny,
     MatchValue,
     PointStruct,
     SearchParams,
@@ -131,14 +132,20 @@ class VectorStore:
         # Build filter conditions
         must_conditions = []
         if modality_filter:
-            must_conditions.append(
-                FieldCondition(
-                    key="modality",
-                    match=MatchValue(value=modality_filter[0])
-                    if len(modality_filter) == 1
-                    else None,
+            if len(modality_filter) == 1:
+                must_conditions.append(
+                    FieldCondition(
+                        key="modality",
+                        match=MatchValue(value=modality_filter[0]),
+                    )
                 )
-            )
+            else:
+                must_conditions.append(
+                    FieldCondition(
+                        key="modality",
+                        match=MatchAny(any=modality_filter),
+                    )
+                )
         if department_filter:
             must_conditions.append(
                 FieldCondition(

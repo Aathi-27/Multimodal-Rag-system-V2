@@ -714,7 +714,7 @@ async def query(request: QueryRequest):
         m.query_latency.observe(total_latency)
 
         # ── Detect truncation (model hit token limit without natural stop) ──
-        was_truncated = getattr(llm, '_last_finish_reason', None) == "length"
+        was_truncated = getattr(llm._thread_local, 'last_finish_reason', None) == "length"
         if was_truncated:
             truncation_note = "\n\n---\n*[Response reached the generation limit and may be incomplete. Try a more specific question for a complete answer.]*"
             answer_tokens.append(truncation_note)
@@ -2616,7 +2616,7 @@ async def query_audio(
 
         llm = get_llm_engine()
         answer = "(LLM unavailable)"
-        if llm.is_loaded or True:
+        if llm.is_loaded:
             try:
                 if not llm.is_loaded:
                     llm.load()

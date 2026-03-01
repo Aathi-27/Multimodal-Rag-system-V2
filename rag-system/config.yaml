@@ -67,7 +67,7 @@ page_embeddings:
   fallback_min_pages: 2
 
 llm:
-  model_path: D:/Offline_Rag_V2/models/llm/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  model_path: models/llm/qwen2.5-1.5b-instruct-q4_k_m.gguf
   context_window: 4096
   max_new_tokens: 768
   temperature: 0.3
@@ -81,7 +81,7 @@ llm:
 # Download one of: gemma-2-2b-it-Q4_K_M.gguf  /  phi-2.Q4_K_M.gguf
 slm:
   enabled: false
-  model_path: D:/Offline_Rag_V2/models/llm/slm.gguf      # placeholder — rename to actual file
+  model_path: models/llm/slm.gguf      # placeholder — rename to actual file
   context_window: 4096
   max_new_tokens: 256
   temperature: 0.3
@@ -104,11 +104,11 @@ server:
   max_upload_size_mb: 100
 
 paths:
-  data_dir: D:/Offline_Rag_V2/rag-system/data
-  uploads_dir: D:/Offline_Rag_V2/rag-system/data/uploads
-  index_dir: D:/Offline_Rag_V2/rag-system/data/index
-  logs_dir: D:/Offline_Rag_V2/rag-system/data/logs
-  models_dir: D:/Offline_Rag_V2/models
+  data_dir: data
+  uploads_dir: data/uploads
+  index_dir: data/index
+  logs_dir: data/logs
+  models_dir: ../models
 
 workers:
   document_workers: 2

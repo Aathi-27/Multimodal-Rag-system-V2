@@ -1,6 +1,17 @@
-# Offline RAG System
+# Offline RAG System — Backend
 
-> Multimodal Retrieval-Augmented Generation Platform — Fully Offline
+> See the **[main README](../README.md)** for full project documentation, architecture, and workflow.
+
+This directory contains the FastAPI backend for the Multimodal RAG platform.
+
+## Quick Start
+
+```bash
+# From project root
+cd rag-system
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
 
 ## Architecture
 
@@ -10,17 +21,15 @@
 |-----------|-----------|
 | Document Parsing | Docling (DocumentConverter → Markdown) |
 | Chunking | Custom sliding window (480 target, 512 max, 50 overlap) |
-| Embedding | BAAI/bge-small-en-v1.5 (384 dim) |
+| Embedding | BAAI/bge-small-en-v1.5 (384 dim, CUDA) |
 | Vector DB | Qdrant (persistent, HNSW m=16, ef=100) |
-| Keyword Search | rank-bm25 |
+| Keyword Search | rank-bm25 (BM25Okapi) |
 | Fusion | Reciprocal Rank Fusion (k=60) |
-| Reranker | BAAI/bge-reranker-base (cross-encoder) |
-| LLM Runtime | llama.cpp via llama-cpp-python |
-| LLM Model | Gemma-2-9B GGUF (Q4_K_M) |
-| Speech-to-Text | faster-whisper (small) |
-| OCR | PaddleOCR |
-| Vision Caption | MiniCPM-V (optional) |
-| Process Isolation | multiprocessing.Process + Queue |
+| Reranker | BAAI/bge-reranker-base (cross-encoder, CPU) |
+| LLM | Qwen2.5-1.5B-Instruct Q4_K_M via llama-cpp-python |
+| Visual Search | CLIP ViT-B/32 (512-dim, separate Qdrant collection) |
+| Speech-to-Text | faster-whisper small (CTranslate2, int8) |
+| OCR | EasyOCR (English, CPU) |
 
 ## Quick Start
 

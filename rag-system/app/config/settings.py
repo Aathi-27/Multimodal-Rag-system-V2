@@ -89,6 +89,12 @@ class PageEmbeddingsConfig:
 @dataclass
 class LLMConfig:
     model_path: str = "models/llm/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+
+    def __post_init__(self) -> None:
+        """Resolve relative model_path against PROJECT_ROOT."""
+        p = Path(self.model_path)
+        if not p.is_absolute():
+            self.model_path = str((PROJECT_ROOT / p).resolve())
     context_window: int = 4096
     max_new_tokens: int = 768
     temperature: float = 0.3
@@ -102,6 +108,12 @@ class SLMConfig:
     """Optional small language model for query rewrite / context compression / verification."""
     enabled: bool = False
     model_path: str = "models/llm/slm.gguf"
+
+    def __post_init__(self) -> None:
+        """Resolve relative model_path against PROJECT_ROOT."""
+        p = Path(self.model_path)
+        if not p.is_absolute():
+            self.model_path = str((PROJECT_ROOT / p).resolve())
     context_window: int = 4096
     max_new_tokens: int = 256
     temperature: float = 0.3
@@ -135,6 +147,14 @@ class PathsConfig:
     index_dir: str = "data/index"
     logs_dir: str = "data/logs"
     models_dir: str = "models"
+
+    def __post_init__(self) -> None:
+        """Resolve relative paths against PROJECT_ROOT for portability."""
+        self.data_dir = str((PROJECT_ROOT / self.data_dir).resolve())
+        self.uploads_dir = str((PROJECT_ROOT / self.uploads_dir).resolve())
+        self.index_dir = str((PROJECT_ROOT / self.index_dir).resolve())
+        self.logs_dir = str((PROJECT_ROOT / self.logs_dir).resolve())
+        self.models_dir = str((PROJECT_ROOT / self.models_dir).resolve())
 
 
 @dataclass
