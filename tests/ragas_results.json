@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-02-15 08:56:22",
+  "num_samples": 2,
+  "num_docs": 5,
+  "custom_metrics": {
+    "retrieval_hit_rate": 1.0,
+    "source_accuracy": 1.0,
+    "avg_latency_s": 272.9711959500273,
+    "total_latency_s": 545.9423919000546,
+    "avg_reranker_score": 0.7101014256477356,
+    "key_term_recall": 0.5416666666666666
+  },
+  "passed": false,
+  "per_sample": [
+    {
+      "question": "Who founded Quantum Systems Inc. and when?",
+      "response": "Quantum Systems Inc. was founded in 2019 by Dr. Elena Vasquez and Dr. Marcus Chen. [Source: quantum_systems_over",
+      "sources": [
+        "quantum_systems_overview.md",
+        "quantum_systems_overview.md"
+      ],
+      "reranker_scores": [
+        0.7310130000114441,
+        0.7310130000114441
+      ],
+      "latency_s": 308.060998400033,
+      "num_retrieved": 15
+    },
+    {
+      "question": "What cryptographic algorithms does QuantumShield use?",
+      "response": "QuantumShield uses the following cryptographic algorithms:\n\n1. CRYSTALS-Kyber for key encapsulation\n2. CRYSTALS-Dilith",
+      "sources": [
+        "quantumshield_technical.md",
+        "quantumshield_technical.md"
+      ],
+      "reranker_scores": [
+        0.6891898512840271,
+        0.6891898512840271
+      ],
+      "latency_s": 237.88139350002166,
+      "num_retrieved": 15
+    }
+  ]
+}

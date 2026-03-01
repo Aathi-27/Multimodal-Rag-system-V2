@@ -1,0 +1,65 @@
+# ── Python ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# ── Models (too large for git) ────────────────────────
+models/llm/*.gguf
+models/embeddings/bge-small-en-v1.5/model.safetensors
+models/reranker/bge-reranker-base/model.safetensors
+models/whisper/faster-whisper-small/*.bin
+models/ocr/
+models/clip/
+
+# ── Data / runtime artifacts ──────────────────────────
+data/
+rag-system/data/uploads/
+rag-system/data/logs/
+rag-system/data/index/
+logs/
+
+# ── Frontend build & deps ────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/tsconfig.tsbuildinfo
+
+# ── Static build artifacts (old copies) ──────────────
+rag-system/static/
+
+# ── Qdrant storage ───────────────────────────────────
+qdrant_storage/
+
+# ── IDE / editor ─────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS files ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Test / benchmark artifacts ───────────────────────
+benchmark_*.json
+server_stderr.txt
+server_stdout.txt
+test_output.txt
+torch_check.txt
+
+# ── Docker ───────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Misc ─────────────────────────────────────────────
+*.log
+.env

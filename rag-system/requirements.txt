@@ -1,0 +1,42 @@
+# ── Core Framework ────────────────────────────────────────────────────────────
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+python-multipart>=0.0.6
+
+# ── Document Processing (Docling) ────────────────────────────────────────────
+docling>=2.0.0
+
+# ── Text Processing ──────────────────────────────────────────────────────────
+ftfy>=6.1.3
+pyyaml>=6.0.1
+
+# ── Multimodal: OCR ──────────────────────────────────────────────────────────
+easyocr>=1.7.0
+pillow>=10.1.0
+
+# ── Multimodal: Audio ────────────────────────────────────────────────────────
+faster-whisper>=1.0.0
+pyannote.audio>=3.1.0
+
+# ── Embeddings & Retrieval ───────────────────────────────────────────────────
+sentence-transformers>=2.2.2
+qdrant-client>=1.7.0
+rank-bm25>=0.2.2
+
+# ── LLM Inference ────────────────────────────────────────────────────────────
+llama-cpp-python>=0.2.50
+
+# ── Knowledge Graph (Optional) ───────────────────────────────────────────────
+# cognee>=0.1.0
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+numpy>=1.24.0
+torch>=2.1.0
+python-dotenv>=1.0.0
+huggingface_hub>=0.20.0
+
+# ── Testing ──────────────────────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+httpx>=0.25.0

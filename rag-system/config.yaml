@@ -1,0 +1,120 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# RAG System Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+# Override any value via environment variable: RAG_SECTION__KEY=value
+# Example: RAG_LLM__GPU_LAYERS=0
+
+chunking:
+  target_tokens: 480
+  max_tokens: 512
+  overlap_tokens: 50
+  method: sliding_window
+
+retrieval:
+  vector_top_k: 50
+  bm25_top_k: 50
+  rrf_k: 60
+  rerank_count: 10
+  rerank_threshold: 0.15
+  rerank_min_results: 5
+
+memory:
+  entity_per_limit: 10
+  entity_global_limit: 20
+
+linking:
+  enabled: true
+  max_related_per_chunk: 3       # Adjacency list cap per chunk
+  max_total_expansion: 10        # Total expansion cap per query
+  expansion_penalty: 0.9         # Score penalty for linked chunks
+  similarity_threshold: 0.70    # Conservative; run distribution analyzer to calibrate
+  timestamp_overlap_seconds: 5.0 # Audio timestamp overlap window
+
+clip:
+  enabled: true
+  enabled_for_query: true          # Phase 4: image-as-query toggle
+  model_name: clip-ViT-B-32
+  collection_name: image_visual_embeddings
+  vector_size: 512
+  distance: Cosine
+  device: cpu                      # Switch to 'cuda' when torch+cuda is installed
+  max_image_results: 5
+  modality_penalty: 0.95           # Slight penalty to keep text retrieval dominant
+  image_embedding_timeout_ms: 150  # Phase 4.6: latency guardrail
+  image_search_timeout_ms: 50      # Phase 4.6: latency guardrail
+  visual_keywords:
+    - chart
+    - diagram
+    - screenshot
+    - image
+    - graph
+    - figure
+    - photo
+    - picture
+    - table
+    - illustration
+    - plot
+    - ui
+    - interface
+    - visual
+    - slide
+    - drawing
+    - map
+
+page_embeddings:
+  activation_threshold: 50    # pages — only for docs > 50 pages
+  fallback_similarity: 0.25
+  fallback_min_pages: 2
+
+llm:
+  model_path: D:/Offline_Rag_V2/models/llm/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  context_window: 4096
+  max_new_tokens: 768
+  temperature: 0.3
+  gpu_layers: -1               # Full offload: all layers + embeddings + output head on GPU
+  n_batch: 512                 # Prompt eval batch size — faster prefill
+  stop_tokens:
+    - "<|im_end|>"
+    - "<|endoftext|>"
+
+# Optional Small Language Model for query rewrite, context compression, verification
+# Download one of: gemma-2-2b-it-Q4_K_M.gguf  /  phi-2.Q4_K_M.gguf
+slm:
+  enabled: false
+  model_path: D:/Offline_Rag_V2/models/llm/slm.gguf      # placeholder — rename to actual file
+  context_window: 4096
+  max_new_tokens: 256
+  temperature: 0.3
+  gpu_layers: 0
+
+qdrant:
+  host: localhost
+  port: 6333
+  collection_name: rag_chunks
+  vector_size: 384
+  distance: Cosine
+  hnsw_m: 16
+  hnsw_ef_construct: 100
+  hnsw_ef_search: 64
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  workers: 1
+  max_upload_size_mb: 100
+
+paths:
+  data_dir: D:/Offline_Rag_V2/rag-system/data
+  uploads_dir: D:/Offline_Rag_V2/rag-system/data/uploads
+  index_dir: D:/Offline_Rag_V2/rag-system/data/index
+  logs_dir: D:/Offline_Rag_V2/rag-system/data/logs
+  models_dir: D:/Offline_Rag_V2/models
+
+workers:
+  document_workers: 2
+  ocr_workers: 1
+  audio_workers: 1
+  task_timeout: 300            # seconds
+
+log_level: INFO
+log_json: true

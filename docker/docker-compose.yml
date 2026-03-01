@@ -1,0 +1,60 @@
+# Docker Compose for Offline RAG System
+# Models mounted as external volume - NOT baked into images
+
+version: "3.9"
+
+services:
+  # ── Qdrant Vector Database ─────────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:v1.15.0
+    container_name: rag-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── RAG Application ────────────────────────────────────────────────────────
+  rag-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: rag-app
+    ports:
+      - "8000:8000"
+    volumes:
+      # Models mounted externally — NOT baked into image
+      - ../models:/models:ro
+      # Persistent data
+      - rag_data:/data
+    environment:
+      - RAG_QDRANT__HOST=qdrant
+      - RAG_QDRANT__PORT=6333
+      - RAG_LLM__MODEL_PATH=/models/llm/gemma-2-9b-it-Q4_K_M.gguf
+      - RAG_LLM__GPU_LAYERS=0   # Set to 30 if GPU available
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    # Uncomment below for GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  qdrant_storage:
+    driver: local
+  rag_data:
+    driver: local

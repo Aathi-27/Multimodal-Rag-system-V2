@@ -1,0 +1,96 @@
+==============================================================================
+  RAGAS EVALUATION — Offline RAG Pipeline
+  Corpus: 5 documents, 2 evaluation queries
+==============================================================================
+
+[1/5] Ingesting synthetic knowledge corpus...
+      ✓ Ingested 5 chunks in 18.6s
+
+[2/5] Running 2 queries through the full pipeline...
+      Q1/2: Who founded Quantum Systems Inc. and when?...The tokenizer you are loading from 'D:\Offline_Rag_V2\models\reranker\bge-reranker-base' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+llama_context: n_ctx_per_seq (1024) < n_ctx_train (32768) -- the full capacity of the model will not be utilized
+  ✓ 308.1s
+      Q2/2: What cryptographic algorithms does QuantumShield use?...  ✓ 237.9s
+
+[3/5] Evaluating with RAGAS non-LLM metrics...
+      ✗ Non-LLM evaluation failed: rapidfuzz is required for string distance. Please install it using `pip install rapidfuzz`
+Traceback (most recent call last):
+  File "D:\Offline_Rag_V2\.venv\Lib\site-packages\ragas\metrics\collections\_string.py", line 173, in __init__
+    from rapidfuzz import distance
+ModuleNotFoundError: No module named 'rapidfuzz'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Offline_Rag_V2\tests\test_ragas_evaluation.py", line 933, in main
+    non_llm_result = evaluate_non_llm_metrics(pipeline_results, eval_samples)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Offline_Rag_V2\tests\test_ragas_evaluation.py", line 516, in evaluate_non_llm_metrics
+    NonLLMStringSimilarity(),
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Offline_Rag_V2\.venv\Lib\site-packages\ragas\metrics\collections\_string.py", line 175, in __init__
+    raise ImportError(
+ImportError: rapidfuzz is required for string distance. Please install it using `pip install rapidfuzz`
+
+[4/5] Setting up judge LLM for LLM-based metrics...
+      ⊘ No judge LLM available — skipping LLM-based metrics
+        (Set OPENAI_API_KEY or ensure llama-cpp-python server can start)
+
+[5/5] Computing custom metrics and generating report...
+
+══════════════════════════════════════════════════════════════════════════════
+  PER-SAMPLE PIPELINE RESULTS
+══════════════════════════════════════════════════════════════════════════════
+
+  Q1: Who founded Quantum Systems Inc. and when?
+  ────────────────────────────────────────────────────────────────────────
+  Response  : Quantum Systems Inc. was founded in 2019 by Dr. Elena Vasquez and Dr. Marcus Chen. [Source: quantum_systems_over
+  Reference : Quantum Systems Inc. was founded in 2019 by Dr. Elena Vasquez and Dr. Marcus Chen in Boulder, Colorado.
+  Sources   : ['quantum_systems_overview.md', 'quantum_systems_overview.md']  expected=quantum_systems_overview.md  [✓]
+  Reranker  : ['0.731', '0.731']
+  Key Terms : 3/4 = 75%  ['2019', 'Elena Vasquez', 'Marcus Chen']
+  Latency   : 308.06s   Retrieved: 15 chunks
+
+  Q2: What cryptographic algorithms does QuantumShield use?
+  ────────────────────────────────────────────────────────────────────────
+  Response  : QuantumShield uses the following cryptographic algorithms:
+
+1. CRYSTALS-Kyber for key encapsulation
+2. CRYSTALS-Dilith
+  Reference : QuantumShield uses CRYSTALS-Kyber for key encapsulation, CRYSTALS-Dilithium for digital signatures, and AES-256-GCM for symmetric encryption.
+  Sources   : ['quantumshield_technical.md', 'quantumshield_technical.md']  expected=quantumshield_technical.md  [✓]
+  Reranker  : ['0.689', '0.689']
+  Key Terms : 1/3 = 33%  ['CRYSTALS-Kyber']
+  Latency   : 237.88s   Retrieved: 15 chunks
+
+══════════════════════════════════════════════════════════════════════════════
+  CUSTOM PIPELINE METRICS
+══════════════════════════════════════════════════════════════════════════════
+
+  Metric                                          Value
+  ───────────────────────────────────────────────────────
+  retrieval_hit_rate                             1.0000
+  source_accuracy                                1.0000
+  avg_latency_s                                272.9712
+  total_latency_s                              545.9424
+  avg_reranker_score                             0.7101
+  key_term_recall                                0.5417
+
+══════════════════════════════════════════════════════════════════════════════
+  FINAL RAGAS EVALUATION SUMMARY
+══════════════════════════════════════════════════════════════════════════════
+
+  Non-LLM Metrics (avg)   : 0.0000
+  LLM Metrics (avg)       : SKIPPED
+  Retrieval Hit Rate       : 100%
+  Source Accuracy           : 100%
+  Key Term Recall           : 54%
+  Avg Reranker Score        : 0.7101
+  Avg Latency per Query     : 272.97s
+  Total Evaluation Time     : 578.9s
+  Samples Evaluated         : 8
+
+  Overall Assessment: ❌ FAIL
+  ════════════════════════════════════════════════════════════════════════════
+
+  Results saved to D:\Offline_Rag_V2\tests\ragas_results.json
