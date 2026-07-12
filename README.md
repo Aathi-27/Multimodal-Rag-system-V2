@@ -91,6 +91,9 @@ This system enables users to upload documents (PDF, DOCX, PPTX), images (PNG, JP
 
 ## System Architecture
 
+![System Design Architecture](docs/system-architecture.png)
+*Figure: System Design Architecture of the Multimodal RAG System V2*
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                        React 18 Frontend (Vite)                         │
