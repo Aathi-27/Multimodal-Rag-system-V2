@@ -91,7 +91,7 @@ This system enables users to upload documents (PDF, DOCX, PPTX), images (PNG, JP
 
 ## System Architecture
 
-![System Design Architecture](docs/system-architecture.png)
+![System Design Architecture](docs/system-architecture.png.jpeg)
 *Figure: System Design Architecture of the Multimodal RAG System V2*
 
 ```
