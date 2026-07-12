@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python deps
-COPY requirements.txt .
+COPY rag-system/requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ── Stage 2: Runtime ─────────────────────────────────────────────────────────
